@@ -16,7 +16,7 @@ class UserController {
   async update(request, response) {
     const { email, oldPassword } = request.body;
     const user = await User.findByPk(request.userId);
-    if (email !== user.email) {
+    if (email && email !== user.email) {
       const emailExist = await User.findOne({ where: { email } });
       if (emailExist) {
         return response.status(400).json({ message: 'User already exists' });
