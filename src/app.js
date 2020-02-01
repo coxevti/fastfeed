@@ -25,7 +25,7 @@ class App {
     this.serve.use(async (error, request, response, next) => {
       if (process.env.NODE_ENV === 'development') {
         const errors = await new Youch(error, request).toJSON();
-        return response.status(500).json(errors);
+        return response.status(error.status || 500).json(errors);
       }
       return response.status(500).json({ message: 'Internal server error' });
     });

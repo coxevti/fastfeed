@@ -20,7 +20,7 @@ export default {
     }
     return callback(
       {
-        error: 'Only .png, .jpg and .jpeg format allowed!',
+        message: 'Only .png, .jpg and .jpeg format allowed!',
         status: 400,
       },
       false

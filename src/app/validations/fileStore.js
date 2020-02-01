@@ -5,7 +5,7 @@ export default async (request, response, next) => {
     file: Yup.mixed().required(),
   });
   try {
-    await schema.validate(request.file, { abortEarly: false });
+    await schema.validate(request);
     return next();
   } catch (error) {
     return response
