@@ -1,5 +1,5 @@
 import User from '../models/User';
-import File from '../models/Files';
+import File from '../models/File';
 
 class UserController {
   async store(request, response) {
