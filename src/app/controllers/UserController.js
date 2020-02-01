@@ -1,4 +1,5 @@
 import User from '../models/User';
+import File from '../models/Files';
 
 class UserController {
   async store(request, response) {
@@ -25,8 +26,17 @@ class UserController {
     if (oldPassword && !(await user.checkPassword(oldPassword))) {
       return response.status(401).json({ message: 'Invalid password' });
     }
-    const { id, name } = await user.update(request.body);
-    return response.json({ id, name, email });
+    await user.update(request.body);
+    const { id, name, avatar } = await User.findByPk(request.userId, {
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url'],
+        },
+      ],
+    });
+    return response.json({ id, name, email, avatar });
   }
 }
 
