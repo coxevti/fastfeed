@@ -9,12 +9,14 @@ import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
 import RecipientController from './app/controllers/RecipientController';
 import FileController from './app/controllers/FileController';
+import DeliverymanController from './app/controllers/DeliverymanController';
 
 import userStoreValidation from './app/validations/userStore';
 import userUpdateValidation from './app/validations/userUpdate';
 import recipientStoreValidation from './app/validations/recipientStore';
 import recipientUpdateValidation from './app/validations/recipientUpdate';
 import fileStoreValidation from './app/validations/fileStore';
+import deliverymanStoreValidation from './app/validations/DeliverymanStore';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -43,5 +45,14 @@ routes.post(
   fileStoreValidation,
   FileController.store
 );
+
+routes.get('/deliverers', DeliverymanController.index);
+routes.post(
+  '/deliverers',
+  deliverymanStoreValidation,
+  DeliverymanController.store
+);
+routes.put('/deliverers/:id', DeliverymanController.update);
+routes.delete('/deliverers/:id', DeliverymanController.destroy);
 
 export default routes;
