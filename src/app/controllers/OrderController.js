@@ -1,4 +1,7 @@
 import Order from '../models/Order';
+import Deliveryman from '../models/Deliveryman';
+
+import Mail from '../../lib/Mail';
 
 class OrderController {
   async index(request, response) {
@@ -8,7 +11,17 @@ class OrderController {
 
   async store(request, response) {
     const { recipient_id, deliveryman_id, product } = request.body;
+    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
     const order = await Order.create({ recipient_id, deliveryman_id, product });
+    await Mail.sendMail({
+      to: `${deliveryman.name} <${deliveryman.email}>`,
+      subject: 'Produto dísponível para a retirada',
+      template: 'orderDetails',
+      context: {
+        deliveryman: deliveryman.name,
+        product,
+      },
+    });
     return response.status(201).json(order);
   }
 
