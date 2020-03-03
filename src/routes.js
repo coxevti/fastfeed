@@ -11,6 +11,7 @@ import RecipientController from './app/controllers/RecipientController';
 import FileController from './app/controllers/FileController';
 import DeliverymanController from './app/controllers/DeliverymanController';
 import OrderController from './app/controllers/OrderController';
+import DeliveryController from './app/controllers/DeliveryController';
 
 import userStoreValidation from './app/validations/userStore';
 import userUpdateValidation from './app/validations/userUpdate';
@@ -49,6 +50,7 @@ routes.post(
 );
 
 routes.get('/deliverers', DeliverymanController.index);
+routes.get('/deliverers/:id/deliveries', DeliveryController.index);
 routes.post(
   '/deliverers',
   deliverymanStoreValidation,
