@@ -56,6 +56,7 @@ routes.post(
   deliverymanStoreValidation,
   DeliverymanController.store
 );
+routes.post('/deliverers/:id/orders', DeliveryController.store);
 routes.put('/deliverers/:id', DeliverymanController.update);
 routes.delete('/deliverers/:id', DeliverymanController.destroy);
 
