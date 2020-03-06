@@ -12,6 +12,7 @@ import FileController from './app/controllers/FileController';
 import DeliverymanController from './app/controllers/DeliverymanController';
 import OrderController from './app/controllers/OrderController';
 import DeliveryController from './app/controllers/DeliveryController';
+import DeliveryProblemController from './app/controllers/DeliveryProblemController';
 
 import userStoreValidation from './app/validations/userStore';
 import userUpdateValidation from './app/validations/userUpdate';
@@ -64,5 +65,12 @@ routes.get('/orders', OrderController.index);
 routes.post('/orders', orderStoreValidation, OrderController.store);
 routes.put('/orders/:id', OrderController.update);
 routes.delete('/orders/:id', OrderController.destroy);
+
+routes.get('/delivery/all/problems', DeliveryProblemController.index);
+routes.post('/delivery/:id/problems', DeliveryProblemController.store);
+routes.delete(
+  '/problems/:id/cancel-delivery',
+  DeliveryProblemController.destroy
+);
 
 export default routes;
