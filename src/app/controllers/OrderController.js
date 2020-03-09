@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
 
@@ -6,7 +7,9 @@ import Queue from '../../lib/Queue';
 
 class OrderController {
   async index(request, response) {
-    const orders = await Order.findAll();
+    const { q } = request.query;
+    const query = q ? { where: { product: { [Op.like]: `%${q}%` } } } : {};
+    const orders = await Order.findAll(query);
     return response.json(orders);
   }
 
