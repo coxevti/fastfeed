@@ -1,8 +1,11 @@
+import { Op } from 'sequelize';
 import Deliveryman from '../models/Deliveryman';
 
 class DeliverymanController {
   async index(request, response) {
-    const deliverers = await Deliveryman.findAll();
+    const { q } = request.query;
+    const query = q ? { where: { name: { [Op.like]: `%${q}%` } } } : {};
+    const deliverers = await Deliveryman.findAll(query);
     return response.json(deliverers);
   }
 
