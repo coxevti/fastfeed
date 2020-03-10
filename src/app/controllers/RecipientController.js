@@ -1,6 +1,14 @@
+import { Op } from 'sequelize';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
+  async index(request, response) {
+    const { q } = request.query;
+    const query = q ? { where: { name: { [Op.iLike]: `%${q}%` } } } : {};
+    const recipent = await Recipient.findAll(query);
+    return response.json(recipent);
+  }
+
   async store(request, response) {
     const { name, street, number, complement, state, city, cep } = request.body;
     const [recipient] = await Recipient.findOrCreate({
