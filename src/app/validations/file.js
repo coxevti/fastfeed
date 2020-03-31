@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-export default async (request, response, next) => {
+const store = async (request, response, next) => {
   const schema = Yup.object().shape({
     file: Yup.mixed().required(),
   });
@@ -13,3 +13,5 @@ export default async (request, response, next) => {
       .json({ field: error.errors, message: 'Validation fails' });
   }
 };
+
+export default { store };

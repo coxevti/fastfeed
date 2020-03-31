@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-export default async (request, response, next) => {
+const store = async (request, response, next) => {
   const schema = Yup.object().shape({
     avatar_id: Yup.number().required(),
     name: Yup.string().required(),
@@ -17,3 +17,5 @@ export default async (request, response, next) => {
       .json({ fields: error.errors, message: 'Validation fails' });
   }
 };
+
+export default { store };

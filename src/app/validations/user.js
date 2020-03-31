@@ -1,6 +1,26 @@
 import * as Yup from 'yup';
 
-export default async (resquest, response, next) => {
+const store = async (request, response, next) => {
+  const schema = Yup.object().shape({
+    name: Yup.string().required(),
+    email: Yup.string()
+      .email()
+      .required(),
+    password: Yup.string()
+      .min(8)
+      .required(),
+  });
+  try {
+    await schema.validate(request.body, { abortEarly: false });
+    return next();
+  } catch (error) {
+    return response
+      .status(422)
+      .json({ fields: error.errors, message: 'Validation fails' });
+  }
+};
+
+const update = async (resquest, response, next) => {
   const schema = Yup.object().shape({
     name: Yup.string(),
     email: Yup.string().email(),
@@ -23,3 +43,5 @@ export default async (resquest, response, next) => {
       .json({ fields: error.errors, messages: 'Validation fails' });
   }
 };
+
+export default { store, update };
