@@ -4,13 +4,30 @@ import Deliveryman from '../models/Deliveryman';
 
 import OrderDetailsMail from '../jobs/orderDetailsMail';
 import Queue from '../../lib/Queue';
+import EscapeRegex from '../../helpers/EscapeRegex';
 
 class OrderController {
   async index(request, response) {
-    const { q } = request.query;
-    const query = q ? { where: { product: { [Op.like]: `%${q}%` } } } : {};
-    const orders = await Order.findAll(query);
-    return response.json(orders);
+    const { q, page = 1 } = request.query;
+    const limit = 10;
+    const offset = limit * (Number(page) - 1);
+    let query = { limit, offset };
+    if (q) {
+      const regex = EscapeRegex(q);
+      query = {
+        where: { product: { [Op.iLike]: `%${regex}%` } },
+        limit,
+        offset,
+      };
+    }
+    const { count, rows } = await Order.findAndCountAll(query);
+    return response.json({
+      orders: rows,
+      currentPage: Number(page),
+      pages: Math.ceil(count / limit),
+      searchValue: q,
+      numOfResults: count,
+    });
   }
 
   async store(request, response) {
