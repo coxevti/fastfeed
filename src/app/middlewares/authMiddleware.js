@@ -14,7 +14,7 @@ export default async (request, response, next) => {
       request.userId = decoded.id;
       return next();
     }
-    return response.status(500).json({ message: 'Not authorized' });
+    return response.status(401).json({ message: 'Not authorized' });
   } catch (error) {
     return response.status(500).json({ message: error });
   }
