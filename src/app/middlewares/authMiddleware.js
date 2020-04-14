@@ -16,6 +16,6 @@ export default async (request, response, next) => {
     }
     return response.status(401).json({ message: 'Not authorized' });
   } catch (error) {
-    return response.status(500).json({ message: error });
+    return response.status(401).json({ message: error });
   }
 };
