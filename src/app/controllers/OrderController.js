@@ -8,15 +8,16 @@ import EscapeRegex from '../../helpers/EscapeRegex';
 
 class OrderController {
   async index(request, response) {
-    const { q, page = 1 } = request.query;
-    const limit = 10;
-    const offset = limit * (Number(page) - 1);
-    let query = { limit, offset };
+    const { q, page = 1, perPage = 10 } = request.query;
+    const offset = perPage * (Number(page) - 1);
+    const from = (Number(page) - 1) * perPage + 1;
+    const to = page * perPage;
+    let query = { perPage, offset };
     if (q) {
       const regex = EscapeRegex(q);
       query = {
         where: { product: { [Op.iLike]: `%${regex}%` } },
-        limit,
+        perPage,
         offset,
       };
     }
@@ -24,9 +25,11 @@ class OrderController {
     return response.json({
       orders: rows,
       currentPage: Number(page),
-      pages: Math.ceil(count / limit),
+      pages: Math.ceil(count / perPage),
       searchValue: q,
       numOfResults: count,
+      from,
+      to,
     });
   }
 
