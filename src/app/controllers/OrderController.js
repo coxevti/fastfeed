@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
+import Recipient from '../models/Recipient';
 
 import OrderDetailsMail from '../jobs/orderDetailsMail';
 import Queue from '../../lib/Queue';
@@ -9,27 +10,39 @@ import EscapeRegex from '../../helpers/EscapeRegex';
 class OrderController {
   async index(request, response) {
     const { q, page = 1, perPage = 10 } = request.query;
-    const offset = perPage * (Number(page) - 1);
-    const from = (Number(page) - 1) * perPage + 1;
-    const to = page * perPage;
-    let query = { limit: perPage, offset };
+    const offset = Number(perPage) * (Number(page) - 1);
+    const from = (Number(page) - 1) * Number(perPage) + 1;
+    const to = page * Number(perPage);
+    let query = {
+      limit: Number(perPage),
+      offset,
+      include: [
+        { model: Deliveryman, as: 'deliveryman', attributes: ['id', 'name'] },
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: ['id', 'name', 'street', 'state'],
+        },
+      ],
+      order: [['id', 'ASC']],
+    };
     if (q) {
       const regex = EscapeRegex(q);
       query = {
+        ...query,
         where: { product: { [Op.iLike]: `%${regex}%` } },
-        limit: perPage,
-        offset,
       };
     }
     const { count, rows } = await Order.findAndCountAll(query);
     return response.json({
       orders: rows,
       currentPage: Number(page),
-      pages: Math.ceil(count / perPage),
+      pages: Math.ceil(count / Number(perPage)),
+      perPage: Number(perPage),
       searchValue: q,
       numOfResults: count,
       from,
-      to,
+      to: to > count ? count : to,
     });
   }
 
