@@ -12,12 +12,12 @@ class OrderController {
     const offset = perPage * (Number(page) - 1);
     const from = (Number(page) - 1) * perPage + 1;
     const to = page * perPage;
-    let query = { perPage, offset };
+    let query = { limit: perPage, offset };
     if (q) {
       const regex = EscapeRegex(q);
       query = {
         where: { product: { [Op.iLike]: `%${regex}%` } },
-        perPage,
+        limit: perPage,
         offset,
       };
     }
