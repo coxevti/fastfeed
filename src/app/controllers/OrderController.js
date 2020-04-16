@@ -41,7 +41,7 @@ class OrderController {
       perPage: Number(perPage),
       searchValue: q,
       numOfResults: count,
-      from,
+      from: count === 0 ? 0 : from,
       to: to > count ? count : to,
     });
   }
