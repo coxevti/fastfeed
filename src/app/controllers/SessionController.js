@@ -17,7 +17,7 @@ class SessionController {
       return response.status(400).json({ message: 'User does not exists.' });
     }
     if (!(await user.checkPassword(password))) {
-      return response.status(401).json({ message: 'Authentication failed' });
+      return response.status(403).json({ message: 'Authentication failed' });
     }
     const { id, name, avatar } = user;
     return response.json({
