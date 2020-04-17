@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
+import File from '../models/File';
 
 import OrderDetailsMail from '../jobs/orderDetailsMail';
 import Queue from '../../lib/Queue';
@@ -30,6 +31,11 @@ class OrderController {
             'city',
             'cep',
           ],
+        },
+        {
+          model: File,
+          as: 'signature',
+          attributes: ['id', 'path', 'url'],
         },
       ],
       order: [['id', 'ASC']],
